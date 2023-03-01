@@ -20,7 +20,7 @@ If you need more help on how to run this example (and test if it's working), see
 
 ## How to Set Up in Yuzu
 
-Open `gamepad_and_mouse_server.exe` as administrator. It must be opened as administrator or the else the mouse will not be read. It also must be kept open at all times while being used with Yuzu. Open Yuzu and navitate to `Emulation > Configure > Controls` to set up your controls. We reccomend using the `Pro Controller` or `Handheld` as the emulated controller, as they only have one motion input. Near the bottom find `Motion 1`, click it, and shake the mouse until it says `cemuhookudp`. Your mouse has now been assigned as the motion device.
+Open `gamepad_and_mouse_server.exe` as administrator. It must be opened as administrator or the else the mouse will not be read. It also must be kept open at all times while being used with Yuzu. Open Yuzu and navitate to `Emulation > Configure > Controls` to set up your controls. I reccomend using the `Pro Controller` or `Handheld` as the emulated controller, as they only have one motion input. Near the bottom find `Motion 1`, click it, and shake the mouse until it says `cemuhookudp`. Your mouse has now been assigned as the motion device.
 
 If this doesn't work, make sure the program is running as administator and navigate to the bottom of the Yuzu controller config window and find the motion checkbox. Ensure it is checked and press the `Configure` button under it. Under CemuhookUDP Config ensure Server is set as `127.0.0.1` and Port is set as `26760`. You can click `Test` to test if Yuzu is detecting your inputs.
 
