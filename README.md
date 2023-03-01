@@ -18,6 +18,10 @@ You can download compiled example using first connected gamepad and mouse (used 
 
 If you need more help on how to run this example (and test if it's working), see [issue](https://github.com/zduny/pad-motion/issues/2).
 
+Support original Pad Motion devloper zduny on Ko-Fi!
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O31JYZ4)
+
 ## How to Set Up in Yuzu
 
 Open `gamepad_and_mouse_server.exe` as administrator. It must be opened as administrator or the else the mouse will not be read. It also must be kept open at all times while being used with Yuzu. Open Yuzu and navitate to `Emulation > Configure > Controls` to set up your controls. I reccomend using the `Pro Controller` or `Handheld` as the emulated controller, as they only have one motion input. Near the bottom find `Motion 1`, click it, and shake the mouse until it says `cemuhookudp`. Your mouse has now been assigned as the motion device.
