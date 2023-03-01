@@ -11,16 +11,16 @@ Includes client and server.
 
 https://crates.io/crates/pad-motion
 
+Support original Pad Motion devloper zduny on Ko-Fi!
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O31JYZ4)
+
 ## Gamepad and Mouse Server Example
 You can download compiled example using first connected gamepad and mouse (used to emulate gyroscope data) as an input source, here:
 
 [gamepad-and-mouse-server.zip](https://github.com/NarikoNep/pad-motion/releases/download/1.0.0/gamepad_and_mouse_server.zip)
 
 If you need more help on how to run this example (and test if it's working), see [issue](https://github.com/zduny/pad-motion/issues/2).
-
-Support original Pad Motion devloper zduny on Ko-Fi!
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O31JYZ4)
 
 ## How to Set Up in Yuzu
 
