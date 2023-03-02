@@ -112,3 +112,22 @@ Enter = Pause Menu
 [Cemuhook UDP Pad motion data provider setup](https://cemuhook.sshnuke.net/padudpserver.html)
 
 [Cemu Emulator](https://cemu.info/)
+
+## FAQ
+
+**1.) Pad Motion will not open and/or closes itself when opened.**
+
+The port Pad Motion uses is probably already in use or Pad Motion is running in the background. You can test this by opening a Powershell window where gamepad-and-mouse-server.exe is stored and type `.\gamepad-and-mouse-server.exe`.
+
+If you get the error something like **"thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 10048, kind: AddrInUse, message: "Only one usage of each socket address (protocol/network address/port) is normally permitted." }', examples\gamepad-and-mouse-server.rs:54:51"**, then you have another program or precess running that is using that port. Disable any process that is using localhost `127.0.0.1` port `26760`. 
+
+If you get no message and lose the ability to type in Powershell, then Pad Motion is running secessfully.
+
+**2.) Pad Motion is running, but Yuzu doesn't see it.**
+
+Run gamepad-and-mouse-server.exe program as administrator and keep it running in the background. Do not close it. Open Yuzu and navigate to Emulation > Configure > Controller and select Pro Controller. Ensure the Motion checkbox is checked and click "Configure" under it. Make sure there is a server set up with `127.0.0.1` as the server and `26760` as the port. This is the default local server that cemuhook uses. Click "Test" and move your mouse around until the test is complete. If it's successful then Yuzu is detecting your mouse input. Now to ensure the mouse input is set as the motion control, go to "Motion 1" and click the input box below and shake the mouse. After shaking it, it should instantly say "cemuhookudp". 
+
+**2.) Pad Motion works, but my inputs are all weird.**
+
+You probably changed the Control Scheme to Pointer or Hybrid in MPR. Keep it at Dual Stick. Go down to Camera and change it to Gyro + Stick. Any other setting will not read the mouse correctly.
+
