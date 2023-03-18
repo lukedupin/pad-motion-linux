@@ -1,3 +1,9 @@
+# Linux update
+
+This version is a fork from: https://github.com/fizzisoda/pad-motion
+This version has be updated to use /dev/input/mice on linux (and maybe macosx?)
+The dependacy from multilib has been removed.
+
 # This was edited for use with MPR on Yuzu
 
 ### There is now a Video Tutorial!
