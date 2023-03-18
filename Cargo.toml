@@ -16,11 +16,10 @@ name = "pad_motion"
 
 [dependencies]
 byteorder = "1.4.2"
-crc32fast = "1.2.1"
+crc = "1.8.1"
 rand = "0.8.3"
 crossbeam-queue = "0.3.1"
 
 [dev-dependencies]
 ctrlc = "3.1.8"
 gilrs = "0.8.0"
-multiinput = "0.1.0"

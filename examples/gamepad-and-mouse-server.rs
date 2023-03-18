@@ -1,15 +1,61 @@
-use std::sync::Arc;
+use std::sync::{Arc, mpsc};
+use std::sync::mpsc::{Sender, Receiver};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::{Instant, Duration};
+use std::thread;
 
 use gilrs::{Gilrs, Button, Axis};
-use multiinput::{RawInputManager, RawEvent};
 
 use pad_motion::protocol::*;
 use pad_motion::server::*;
 
+use std::fs::OpenOptions;
+use std::io::{Read};
+//use std::os::unix::io::{AsRawFd, RawFd};
+
+struct Mizouse {
+    left: u8,
+    right: u8,
+    middle: u8,
+    x: i8,
+    y: i8,
+    wheel: i8,
+}
+
+fn mouse(tx: Sender<Mizouse>) {
+    let device_path = "/dev/input/mice";
+    let mut file = OpenOptions::new().read(true).write(true).open(device_path).unwrap();
+
+    let mut data = [0; 4];
+    let mut left = 0;
+    let mut middle = 0;
+    let mut right = 0;
+    let mut x = 0;
+    let mut y = 0;
+
+    loop {
+        let bytes = file.read(&mut data).unwrap();
+        if bytes > 0 {
+            let val = Mizouse {
+                left: data[0] & 0x1,
+                right: data[0] & 0x2,
+                middle: data[0] & 0x4,
+
+                x: data[1] as i8,
+                y: data[2] as i8,
+                wheel: data[3] as i8,
+            };
+
+            //send the message for the mouse movement
+            tx.send(val).unwrap();
+        }
+    }
+}
+
+
 fn main() {
   let running = Arc::new(AtomicBool::new(true));
+  let (m_tx, m_rx) = mpsc::channel();
 
   {
     let running = running.clone();
@@ -22,6 +68,12 @@ fn main() {
   let server_thread_join_handle = {
     let server = server.clone();
     server.start(running.clone())
+  };
+
+  let mouse_thread_join_handle = {
+      thread::spawn(move|| {
+          mouse(m_tx);
+      })
   };
 
   let controller_info = ControllerInfo {
@@ -37,8 +89,11 @@ fn main() {
   }
 
   let mut gilrs = Gilrs::new().unwrap();
+
+  /*
   let mut mouse_manager = RawInputManager::new().unwrap();
   mouse_manager.register_devices(multiinput::DeviceType::Mice);
+  */
 
   let now = Instant::now();
   while running.load(Ordering::SeqCst) {
@@ -49,6 +104,20 @@ fn main() {
     let mut delta_rotation_x = 0.0;
     let mut delta_rotation_y = 0.0;
     let mut delta_mouse_wheel = 0.0;
+    let m_msg = m_rx.try_recv();
+    if let Ok(event) = m_msg {
+      delta_rotation_x += event.x as f32;
+      delta_rotation_y -= event.y as f32;
+      delta_mouse_wheel += event.wheel as f32;
+      /*
+        println!(
+            "w={} x={}, y={}, left={}, middle={}, right={}",
+            event.wheel, event.x, event.y, event.left, event.middle, event.right
+        );
+        */
+    }
+
+    /*
     while let Some(event) = mouse_manager.get_event() {
       match event {
         RawEvent::MouseMoveEvent(_mouse_id, delta_x, delta_y) => {
@@ -57,10 +126,10 @@ fn main() {
         },
         RawEvent::MouseWheelEvent(_mouse_id, delta) => {
           delta_mouse_wheel += delta as f32;          
-        }
-        _ => ()
+                _ => ()
       }
     }
+    */
 
     let first_gamepad = gilrs.gamepads().next();
     let controller_data = {
@@ -110,7 +179,8 @@ fn main() {
           gyroscope_yaw: delta_mouse_wheel * 300.0,
           .. Default::default()
         }
-      } else {
+      } 
+      else {
         ControllerData {
           connected: true,
           motion_data_timestamp: now.elapsed().as_micros() as u64,
@@ -122,6 +192,7 @@ fn main() {
       }
     };
 
+    //println!("Hey {}", controller_data.gyroscope_roll);
     server.update_controller_data(0, controller_data);
 
     std::thread::sleep(Duration::from_millis(10));

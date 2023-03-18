@@ -261,6 +261,6 @@ impl DsClient for Arc<Client> {
   }
 
   fn next_event(&self) -> Option<ClientEvent> {
-    self.events.pop().ok()
+    self.events.pop()
   }
 }

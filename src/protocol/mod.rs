@@ -4,6 +4,8 @@ use internals::*;
 use std::io::{Cursor, Result, Error, ErrorKind};
 use byteorder::{WriteBytesExt, LittleEndian};
 
+use crc::{crc32};
+
 pub const PROTOCOL_VERSION: u16 = 1001;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -184,7 +186,7 @@ fn compute_checksum(packet: &[u8]) -> u32 {
       *byte = 0;
   }
 
-  crc::crc32::checksum_ieee(&packet)
+  crc32::checksum_ieee(&packet)
 }
 
 pub fn encode_message(writer: &mut Vec<u8>, message: Message) -> Result<()> {
