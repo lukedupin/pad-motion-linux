@@ -95,6 +95,8 @@ fn main() {
   mouse_manager.register_devices(multiinput::DeviceType::Mice);
   */
 
+  println!("Running");
+
   let now = Instant::now();
   while running.load(Ordering::SeqCst) {
     // Consume controller events
@@ -104,17 +106,11 @@ fn main() {
     let mut delta_rotation_x = 0.0;
     let mut delta_rotation_y = 0.0;
     let mut delta_mouse_wheel = 0.0;
-    let m_msg = m_rx.try_recv();
-    if let Ok(event) = m_msg {
-      delta_rotation_x += event.x as f32;
-      delta_rotation_y -= event.y as f32;
-      delta_mouse_wheel += event.wheel as f32;
-      /*
-        println!(
-            "w={} x={}, y={}, left={}, middle={}, right={}",
-            event.wheel, event.x, event.y, event.left, event.middle, event.right
-        );
-        */
+    while let Ok(event) = m_rx.try_recv() {
+        delta_rotation_x += event.x as f32;
+        delta_rotation_y -= event.y as f32;
+        delta_mouse_wheel += event.wheel as f32;
+        //println!( "w={} x={}, y={}, left={}, middle={}, right={}", event.wheel, event.x, event.y, event.left, event.middle, event.right);
     }
 
     /*
